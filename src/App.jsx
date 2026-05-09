@@ -271,10 +271,16 @@ export default function TechHub() {
         body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1000, system, messages:[{role:"user",content:q}] })
       });
       const data = await res.json();
+      if (!res.ok) {
+        const errMsg = data.error?.message || JSON.stringify(data);
+        setMsgs(prev => [...prev, { role:"assistant", text:"❌ API Error: " + errMsg }]);
+        setLoading(false);
+        return;
+      }
       const reply = data.content?.[0]?.text || "Xin loi, khong the tra loi luc nay.";
       setMsgs(prev => [...prev, { role:"assistant", text:reply }]);
-    } catch {
-      setMsgs(prev => [...prev, { role:"assistant", text:"❌ Khong the ket noi. Vui long thu lai." }]);
+    } catch(err) {
+      setMsgs(prev => [...prev, { role:"assistant", text:"❌ Loi: " + err.message }]);
     }
     setLoading(false);
   };
