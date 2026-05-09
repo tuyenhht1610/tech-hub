@@ -259,12 +259,14 @@ export default function TechHub() {
     setLoading(true);
     const topicHint = topic !== "all" ? `\nUser dang xem chu de: ${topic}.` : "";
     const system = `Ban la tro ly AI ho tro training NewPMS Odoo 18 cho team Van hanh cua mvillage.\n\nKnowledge base:\n${KB}\n${topicHint}\n\nHuong dan: Tra loi tieng Viet, ngan gon, thuc te. Dung **bold** cho diem quan trong. Dung so thu tu cho quy trinh. Dung dau - cho danh sach. Them ⚠ Luu y: ... cho canh bao. Ket thuc bang 📄 Nguon: Training NewPMS Odoo 18.`;
+    const apiKey = import.meta.env.VITE_ANTHROPIC_KEY || "";
+    console.log("API Key exists:", apiKey.length > 0, "prefix:", apiKey.substring(0,10));
     try {
       const res = await fetch("https://api.anthropic.com/v1/messages", {
         method:"POST",
         headers:{
           "Content-Type":"application/json",
-          "x-api-key": import.meta.env.VITE_ANTHROPIC_KEY || "",
+          "x-api-key": apiKey,
           "anthropic-version": "2023-06-01",
           "anthropic-dangerous-direct-browser-access": "true"
         },
